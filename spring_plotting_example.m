@@ -13,4 +13,5 @@ function spring_plotting_example()
         update_spring_plot(spring_plot_struct,P1,P2)
         drawnow;
     end
+
 end
