@@ -27,7 +27,7 @@ function [ax,ay,atheta] = compute_accel(x,y,theta,box_params)
     g = box_params.g;
     
     % Centroid position
-    P_C = [x; y];
+    PC = [x; y];
 
     num_springs = size(box_params.P_world, 2); 
     
@@ -35,7 +35,7 @@ function [ax,ay,atheta] = compute_accel(x,y,theta,box_params)
     F_net = [0; -m * g]; 
     tau_net = 0;   
 
-    Plist_world = compute_rbt(x,y,theta,P.box);
+    Plist_world = compute_rbt(x,y,theta,box_params.P_box);
 
     for i = 1:num_springs
 

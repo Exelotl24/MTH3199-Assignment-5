@@ -1,7 +1,3 @@
-clear
-close all
-
-main()
 
 function main() 
 

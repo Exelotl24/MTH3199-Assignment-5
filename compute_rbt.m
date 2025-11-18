@@ -19,6 +19,6 @@ Rotation = R * Plist_box;
 P_centroid = [x; y];
 
 % Translate all the points.
-Plist_world = Rotated_points + P_centroid;
+Plist_world = Rotation + P_centroid;
 
 end
