@@ -89,7 +89,7 @@ function simulate_box()
     vx0 = 0; vy0 = 0; vtheta0 = 0;
     V0 = [x0;y0;theta0;vx0;vy0;vtheta0];
     
-    tspan = [0, 5000];
+    tspan = [0, 10];
     h_ref = 0.01; 
     
     %run the integration

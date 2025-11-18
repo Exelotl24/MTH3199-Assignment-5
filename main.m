@@ -1,4 +1,7 @@
+close all
+clear
 
+main()
 function main() 
 
 
