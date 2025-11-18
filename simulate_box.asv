@@ -98,7 +98,7 @@ function simulate_box()
     % Animation loop
    
     for k = 1:size(Vlist, 1)
-        V_i = Vlist(k,:)';
+        V_i = Vlist();
         x = V_i(1);
         y = V_i(2);
         theta = V_i(3);
@@ -113,7 +113,8 @@ function simulate_box()
             PB = compute_rbt(x, y, theta, box_params.P_box(:, i));
             update_spring_plot(spring_plots{i}, PA, PB);
         end
-  
+        
+        pause(0.15);
         drawnow;
     end
 
