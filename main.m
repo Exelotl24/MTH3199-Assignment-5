@@ -1,9 +1,13 @@
-close all
-clear
+% MAIN FUNCTION
+% RUN THIS PROGRAM TO SEE ASSIGNMENT 
 
-main()
+main
+
 function main() 
-
+    
+    % clear workspace & close figures
+    close all
+    clear
 
     % Run animation
     simulate_box()

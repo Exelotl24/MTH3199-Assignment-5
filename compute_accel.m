@@ -22,31 +22,37 @@
 %atheta: angular acceleration of the box
 function [ax,ay,atheta] = compute_accel(x,y,theta,box_params)
 
+    % Define box parameters
     m = box_params.m;
     I = box_params.I;
     g = box_params.g;
+    k_list = box_params.k_list;
+    l0_list = box_params.l0_list;
+    P_world = box_params.P_world;
+    P_box = box_params.P_box;
     
     % Centroid position
     PC = [x; y];
 
-    num_springs = size(box_params.P_world, 2); 
+    num_springs = size(P_world, 2); 
     
     % Net forces
     F_net = [0; -m * g]; 
     tau_net = 0;   
 
-    Plist_world = compute_rbt(x,y,theta,box_params.P_box);
+    P_list_world = compute_rbt(x,y,theta,P_box);
 
     for i = 1:num_springs
 
         % Spring params
         k_i = box_params.k_list(i);
+        % Natural spring length
         l0_i = box_params.l0_list(i);
 
         % Static mounting point
-        PA = box_params.P_world(:,i);
+        PA = P_world(:,i);
         % Attachment point on box
-        PB = Plist_world(:,i);
+        PB = P_list_world(:,i);
 
         % Calculate force by spring on point B
         F_i = compute_spring_force(k_i,l0_i,PA,PB);
@@ -54,8 +60,11 @@ function [ax,ay,atheta] = compute_accel(x,y,theta,box_params)
         % Update F_net
         F_net = F_net + F_i;
 
+        % Radius from centroid
         r_i = PB - PC;
 
+
+        % Calculating torque from radius and force at each spring
         r_x = r_i(1);
         r_y = r_i(2);
 

@@ -1,5 +1,6 @@
 function simulate_box()
 
+    % define system parameters
     LW = 10; LH = 1; LG = 3;
     m = 1; Ic = (1/12)*(LH^2+LW^2);
 
@@ -23,7 +24,7 @@ function simulate_box()
     P_world = [Pbl1_world,Pbl2_world,Pbr1_world,Pbr2_world];
     P_box = [Pbl_box,Pbl_box,Pbr_box,Pbr_box];
 
-    %define system parameters
+    % package system parameters in a struct
     box_params = struct();
     box_params.m = m;
     box_params.I = Ic;
