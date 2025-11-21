@@ -70,7 +70,7 @@ function main()
     h_ref = 0.01; 
 
     % Run animation
-    simulate_box(V0, tspan, h_ref, box_params, DormandPrince);
+    % % simulate_box(V0, tspan, h_ref, box_params, DormandPrince);
 
     % -------------- EQUILIBRIUM SIMULATION ------------------
 
@@ -78,7 +78,7 @@ function main()
     V_eq_F = find_eq((@(V)rate_func(0, V)), V0);
 
     % test equilibrium function
-    simulate_box(V_eq_F, tspan, h_ref, box_params, DormandPrince);
+    % simulate_box(V_eq_F, tspan, h_ref, box_params, DormandPrince);
 
     % ---------- LINEARIZATION -----------
 
@@ -87,7 +87,7 @@ function main()
     V_eq_J = find_eq(@(V_in) my_linear_rate(0, V_in), V0);
 
     % test equilibrium function
-    simulate_box(V_eq_J, tspan, h_ref, box_params, DormandPrince);
+    % simulate_box(V_eq_J, tspan, h_ref, box_params, DormandPrince);
 
 
 
@@ -174,7 +174,7 @@ function main()
         ylabel('Absolute Displacement')
         title('NonLinear vs Modal')
 
-        simulate_box(V0_modal, tspan, h_ref, box_params, DormandPrince)
+        % simulate_box(V0_modal, tspan, h_ref, box_params, DormandPrince)
         
 
     end
