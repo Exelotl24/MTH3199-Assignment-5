@@ -106,28 +106,56 @@ function main()
     vtheta0 = 1;
 
     %small number used to scale initial perturbation
-    epsilon = 0.01;
-    V0_perturbation = V_eq_F + epsilon*[dx0;dy0;dtheta0;vx0;vy0;vtheta0];
+    % epsilon = 0.01;
+    epsilon_list = logspace(-2, 1, 4);
+
+    for epsilon=epsilon_list
+        V0_perturbation = V_eq_F + epsilon*[dx0;dy0;dtheta0;vx0;vy0;vtheta0];
+    
+        [t_list_nonlinear,V_list_nonlinear,~, ~] = explicit_RK_fixed_step_integration(rate_func,tspan,V0_perturbation,h_ref,DormandPrince);
+        [t_list_linear,V_list_linear,~, ~] = explicit_RK_fixed_step_integration(my_linear_rate,tspan,V0_perturbation,h_ref,DormandPrince);
+    
+        figure()
+        plot(t_list_nonlinear, vecnorm(V_list_nonlinear'), 'DisplayName', 'nonlinear')
+        hold on
+        plot(t_list_linear, vecnorm(V_list_linear'), 'DisplayName', 'linear')
+        xlabel('time')
+        ylabel('V (norm)')
+        title(['Linear vs NonLinear Systems: Epsilon = ', num2str(epsilon)])
+        legend()
+    end
 
 
-    [t_list_nonlinear,V_list_nonlinear,~, ~] = explicit_RK_fixed_step_integration(rate_func,tspan,V0_perturbation,h_ref,DormandPrince);
-    [t_list_linear,V_list_linear,~, ~] = explicit_RK_fixed_step_integration(my_linear_rate,tspan,V0_perturbation,h_ref,DormandPrince);
+    % --------------------- MODAL ANALYSIS ---------------------------
 
-    figure()
-    plot(t_list_nonlinear, vecnorm(V_list_nonlinear'), 'DisplayName', 'nonlinear')
-    hold on
-    plot(t_list_linear, vecnorm(V_list_linear'), 'DisplayName', 'linear')
-    xlabel('time')
-    ylabel('V (norm)')
-    legend()
+    % A matrix is equal to Jaocbian of V_eq
+    A = jacobian_eq;
+
+    % Q is bottom left 3x3 of A
+    Q = - A(4:6, 1:3);
+
+    % Find eigenvectors and eigenvalues of Q
+    [V, D] = eig(Q);
+
+    tspan = [0, 50];
+    epsilon = 0.1;
+    h_ref = 0.1;
+
+    for i = 1:3
+        Umode = V(:, i);
+        omega_n = sqrt(D(i, i));
+
+        %small number
+        V0_modal = V_eq_F + epsilon*[Umode;0;0;0];
+    
+    
+        [t_list, V_list,~, ~] = explicit_RK_fixed_step_integration(rate_func,tspan,V0_modal,h_ref,DormandPrince);
 
 
-    %run the integration of nonlinear system
-    % [tlist_nonlinear,Vlist_nonlinear] =...
-    % your_integrator(my_rate_func,tspan,V0,...);
+        x_modal = V_eq_F(1)+epsilon*Umode(1)*cos(omega_n*tlist);
+        y_modal = V_eq_F(2)+epsilon*Umode(2)*cos(omega_n*tlist);
+        theta_modal = V_eq_F(3)+epsilon*Umode(3)*cos(omega_n*tlist);
+    end
 
-    %run the integration of linear system
-    % [tlist_linear,Vlist_linear] =...
-    % your_integrator(my_linear_rate,tspan,V0,...);
 
 end
