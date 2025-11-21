@@ -27,7 +27,7 @@ function simulate_box(V0, tspan, h_ref, box_params, BT_Struct)
 
     
     %run the integration
-    [~, Vlist, ~, ~] = explicit_RK_fixed_step_integration(my_rate_func, tspan, V0, h_ref, DormandPrince);
+    [~, Vlist, ~, ~] = explicit_RK_fixed_step_integration(my_rate_func, tspan, V0, h_ref, BT_Struct);
 
     % Animation loop
    

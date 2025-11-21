@@ -70,7 +70,7 @@ function main()
     h_ref = 0.01; 
 
     % Run animation
-    % simulate_box(V0, tspan, h_ref, box_params, DormandPrince);
+    simulate_box(V0, tspan, h_ref, box_params, DormandPrince);
 
     % -------------- EQUILIBRIUM SIMULATION ------------------
 
@@ -78,7 +78,7 @@ function main()
     V_eq_F = find_eq((@(V)rate_func(0, V)), V0);
 
     % test equilibrium function
-    % simulate_box(V_eq_F, tspan, h_ref, box_params, DormandPrince);
+    simulate_box(V_eq_F, tspan, h_ref, box_params, DormandPrince);
 
     % ---------- LINEARIZATION -----------
 
@@ -87,7 +87,7 @@ function main()
     V_eq_J = find_eq(@(V_in) my_linear_rate(0, V_in), V0);
 
     % test equilibrium function
-    % simulate_box(V_eq_J, tspan, h_ref, box_params, DormandPrince);
+    simulate_box(V_eq_J, tspan, h_ref, box_params, DormandPrince);
 
 
 
@@ -137,7 +137,7 @@ function main()
     % Find eigenvectors and eigenvalues of Q
     [V, D] = eig(Q);
 
-    tspan = [0, 50];
+    tspan = [0, 10];
     epsilon = 0.1;
     h_ref = 0.1;
 
@@ -152,10 +152,27 @@ function main()
         [t_list, V_list,~, ~] = explicit_RK_fixed_step_integration(rate_func,tspan,V0_modal,h_ref,DormandPrince);
 
 
-        x_modal = V_eq_F(1)+epsilon*Umode(1)*cos(omega_n*tlist);
-        y_modal = V_eq_F(2)+epsilon*Umode(2)*cos(omega_n*tlist);
-        theta_modal = V_eq_F(3)+epsilon*Umode(3)*cos(omega_n*tlist);
+        x_modal = V_eq_F(1)+epsilon*Umode(1)*cos(omega_n*t_list);
+        y_modal = V_eq_F(2)+epsilon*Umode(2)*cos(omega_n*t_list);
+        theta_modal = V_eq_F(3)+epsilon*Umode(3)*cos(omega_n*t_list);
+
+        norm_modal = vecnorm([x_modal; y_modal; theta_modal]);
+
+        figure()
+        plot(t_list, vecnorm(V_list(:, 1:3)'), 'DisplayName', 'Non-Linear Behaviour')
+        hold on
+        plot(t_list, norm_modal, 'DisplayName', 'Modal')
+        legend()
+        xlabel('Time')
+        ylabel('V (norm)')
+        title('NonLinear vs Modal')
+
+        simulate_box(V0_modal, tspan, h_ref, box_params, DormandPrince)
+        
+
     end
+
+    % simulate_box(V0_modal, tspan, h_ref, box_params, DormandPrince)
 
 
 end
