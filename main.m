@@ -116,11 +116,15 @@ function main()
         [t_list_linear,V_list_linear,~, ~] = explicit_RK_fixed_step_integration(my_linear_rate,tspan,V0_perturbation,h_ref,DormandPrince);
     
         figure()
-        plot(t_list_nonlinear, vecnorm(V_list_nonlinear'), 'DisplayName', 'nonlinear')
+        plot(t_list_nonlinear, V_list_nonlinear(:, 1), 'DisplayName', 'Non-Linear X')
         hold on
-        plot(t_list_linear, vecnorm(V_list_linear'), 'DisplayName', 'linear')
+        plot(t_list_nonlinear, V_list_nonlinear(:, 2), 'DisplayName', 'Non-Linear Y')
+        plot(t_list_nonlinear, V_list_nonlinear(:, 3), 'DisplayName', 'Non-Linear Theta')
+        plot(t_list_linear, V_list_linear(:, 1), 'DisplayName', 'Linear X')
+        plot(t_list_linear, V_list_linear(:, 2), 'DisplayName', 'Linear Y')
+        plot(t_list_linear, V_list_linear(:, 3), 'DisplayName', 'Linear Theta')
         xlabel('time')
-        ylabel('V (norm)')
+        ylabel('Component')
         title(['Linear vs NonLinear Systems: Epsilon = ', num2str(epsilon)])
         legend()
     end
@@ -139,7 +143,7 @@ function main()
 
     tspan = [0, 10];
     epsilon = 0.1;
-    h_ref = 0.1;
+    h_ref = abs(tspan(2)-tspan(1))/1000;
 
     for i = 1:3
         Umode = V(:, i);
@@ -156,15 +160,18 @@ function main()
         y_modal = V_eq_F(2)+epsilon*Umode(2)*cos(omega_n*t_list);
         theta_modal = V_eq_F(3)+epsilon*Umode(3)*cos(omega_n*t_list);
 
-        norm_modal = vecnorm([x_modal; y_modal; theta_modal]);
 
         figure()
-        plot(t_list, vecnorm(V_list(:, 1:3)'), 'DisplayName', 'Non-Linear Behaviour')
+        plot(t_list, V_list(:, 1), 'DisplayName', 'Non-Linear X')
         hold on
-        plot(t_list, norm_modal, 'DisplayName', 'Modal')
+        plot(t_list, V_list(:, 2), 'DisplayName', 'Non-Linear Y')
+        plot(t_list, V_list(:, 3), 'DisplayName', 'Non-Linear Theta')
+        plot(t_list, x_modal, 'DisplayName', 'Modal X')
+        plot(t_list, y_modal, 'DisplayName', 'Modal Y')
+        plot(t_list, theta_modal, 'DisplayName', 'Modal Theta')
         legend()
         xlabel('Time')
-        ylabel('V (norm)')
+        ylabel('Component')
         title('NonLinear vs Modal')
 
         simulate_box(V0_modal, tspan, h_ref, box_params, DormandPrince)
