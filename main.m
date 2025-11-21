@@ -66,7 +66,7 @@ function main()
     vx0 = 0; vy0 = 0; vtheta0 = 0;
     V0 = [x0;y0;theta0;vx0;vy0;vtheta0];
 
-    tspan = [0, 5];
+    tspan = [0, 10];
     h_ref = 0.01; 
 
     % Run animation
@@ -123,8 +123,8 @@ function main()
         plot(t_list_linear, V_list_linear(:, 1), 'DisplayName', 'Linear X')
         plot(t_list_linear, V_list_linear(:, 2), 'DisplayName', 'Linear Y')
         plot(t_list_linear, V_list_linear(:, 3), 'DisplayName', 'Linear Theta')
-        xlabel('time')
-        ylabel('Component')
+        xlabel('Time')
+        ylabel('Absolute Displacement')
         title(['Linear vs NonLinear Systems: Epsilon = ', num2str(epsilon)])
         legend()
     end
@@ -171,15 +171,13 @@ function main()
         plot(t_list, theta_modal, 'DisplayName', 'Modal Theta')
         legend()
         xlabel('Time')
-        ylabel('Component')
+        ylabel('Absolute Displacement')
         title('NonLinear vs Modal')
 
         simulate_box(V0_modal, tspan, h_ref, box_params, DormandPrince)
         
 
     end
-
-    % simulate_box(V0_modal, tspan, h_ref, box_params, DormandPrince)
 
 
 end
